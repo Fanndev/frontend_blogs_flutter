@@ -5,6 +5,7 @@ class BeritaModel {
   final String? title;
   final String? isi;
   final String? thumbnail;
+  final List<int>? tags;
   final DateTime? createdAt;
   List<CommentModel>? comments;
 
@@ -15,6 +16,7 @@ class BeritaModel {
     this.thumbnail,
     this.createdAt,
     this.comments,
+    this.tags,
   });
 
   factory BeritaModel.fromJson(Map<String, dynamic> json) {
@@ -23,6 +25,7 @@ class BeritaModel {
       title: json['title'],
       isi: json['isi'],
       thumbnail: json['thumbnail'],
+      tags: json['tags'] != null ? List<int>.from(json['tags']) : null,
       createdAt: json['created_at'] != null ? DateTime.parse(json['created_at']) : null,
       comments: json['comments'] != null
     ? CommentModel.fromJsonList(json['comments'] as List)

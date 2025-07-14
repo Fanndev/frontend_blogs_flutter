@@ -1,8 +1,9 @@
+import 'package:blogs_apps/app/data/api.service.dart';
+import 'package:blogs_apps/app/data/user.model.dart';
+import 'package:blogs_apps/app/middleware/auth.controller.dart';
 import 'package:blogs_apps/app/routes/app_pages.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:blogs_apps/app/middleware/auth.controller.dart';
-import 'package:blogs_apps/app/data/api.service.dart';
 
 class LoginController extends GetxController {
   final AuthController authController = Get.find<AuthController>();
@@ -11,6 +12,7 @@ class LoginController extends GetxController {
   final passwordController = TextEditingController();
 
   var isLoading = false.obs;
+  var isPasswordVisible = false.obs;
 
   Future<void> login() async {
     final username = usernameController.text.trim();
@@ -41,28 +43,36 @@ class LoginController extends GetxController {
 
       if (response.statusCode == 200 || response.statusCode == 201) {
         final token = data['access'] ?? data['token'];
+        final userJson = data['user'];
 
-        if (token != null) {
+        if (token != null && userJson != null) {
           await ApiService.setToken(token);
-          authController.login(username);
+
+          // Parsing ke UserModel dan simpan ke AuthController
+          final user = UserModel.fromJson(userJson);
+          authController.login(user);
 
           Get.snackbar(
             "Login Berhasil",
-            "Selamat datang, $username!",
+            "Selamat datang, ${user.username ?? "User"}!",
             backgroundColor: Colors.green,
             colorText: Colors.white,
             snackPosition: SnackPosition.TOP,
             margin: EdgeInsets.all(12),
             borderRadius: 8,
-            duration: Duration(seconds: 2),
+            duration: const Duration(seconds: 2),
           );
 
-          // ✅ Redirect ke MainView atau ReelsView setelah login
-          Future.delayed(Duration(milliseconds: 800), () {
-            Get.offAllNamed(Routes.MAIN);
+          // Redirect sesuai role
+          Future.delayed(const Duration(milliseconds: 800), () {
+            if (user.role == "admin") {
+              Get.offAllNamed(Routes.ADMIN_MAIN);
+            } else {
+              Get.offAllNamed(Routes.MAIN);
+            }
           });
         } else {
-          throw "Token tidak ditemukan pada response.";
+          throw "Token atau data user tidak ditemukan pada response.";
         }
       } else {
         throw data['message'] ?? "Gagal login, periksa kembali username dan password.";
@@ -76,7 +86,7 @@ class LoginController extends GetxController {
         snackPosition: SnackPosition.TOP,
         margin: EdgeInsets.all(12),
         borderRadius: 8,
-        duration: Duration(seconds: 3),
+        duration: const Duration(seconds: 3),
       );
     } finally {
       isLoading.value = false;

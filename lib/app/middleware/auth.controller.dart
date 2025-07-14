@@ -1,21 +1,17 @@
 import 'package:get/get.dart';
+import 'package:blogs_apps/app/data/user.model.dart';
 
 class AuthController extends GetxController {
-  RxBool isLoggedIn = false.obs;
-  RxString username = ''.obs;
-  RxString? email = ''.obs; // jika ingin email
+  var user = UserModel().obs;
+  var isLoggedIn = false.obs;
 
-  void login(String user, [String? userEmail]) {
+  void login(UserModel userData) {
+    user.value = userData;
     isLoggedIn.value = true;
-    username.value = user;
-    if (userEmail != null) {
-      email?.value = userEmail;
-    }
   }
 
   void logout() {
+    user.value = UserModel();
     isLoggedIn.value = false;
-    username.value = '';
-    email?.value = '';
   }
 }

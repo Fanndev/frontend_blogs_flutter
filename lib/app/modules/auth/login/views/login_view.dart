@@ -41,17 +41,27 @@ class LoginView extends StatelessWidget {
                 const SizedBox(height: 16),
 
                 // Password
-                TextField(
-                  controller: controller.passwordController,
-                  obscureText: true,
-                  decoration: InputDecoration(
-                    labelText: "Password",
-                    prefixIcon: Icon(Icons.lock),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                  ),
-                ),
+                Obx(() => TextField(
+      controller: controller.passwordController,
+      obscureText: !controller.isPasswordVisible.value,
+      decoration: InputDecoration(
+        labelText: "Password",
+        prefixIcon: Icon(Icons.lock),
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(12),
+        ),
+        suffixIcon: IconButton(
+          icon: Icon(
+            controller.isPasswordVisible.value
+                ? Icons.visibility
+                : Icons.visibility_off,
+          ),
+          onPressed: () {
+            controller.isPasswordVisible.toggle();
+          },
+        ),
+      ),
+    )),
                 const SizedBox(height: 24),
 
                 // Tombol Login

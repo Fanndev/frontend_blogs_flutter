@@ -2,14 +2,18 @@ import 'package:get/get.dart';
 
 import '../modules/admin/admin_blogs/bindings/admin_blogs_binding.dart';
 import '../modules/admin/admin_blogs/views/admin_blogs_view.dart';
+import '../modules/admin/admin_category/bindings/admin_category_binding.dart';
+import '../modules/admin/admin_category/views/admin_category_view.dart';
+import '../modules/admin/admin_create_blogs/bindings/admin_create_blogs_binding.dart';
+import '../modules/admin/admin_create_blogs/views/admin_create_blogs_view.dart';
+import '../modules/admin/admin_dashboard/bindings/admin_dashboard_binding.dart';
+import '../modules/admin/admin_dashboard/views/admin_dashboard_view.dart';
 import '../modules/admin/admin_main/bindings/admin_main_binding.dart';
 import '../modules/admin/admin_main/views/admin_main_view.dart';
 import '../modules/admin/admin_profile/bindings/admin_profile_binding.dart';
 import '../modules/admin/admin_profile/views/admin_profile_view.dart';
-import '../modules/admin/dashboard/bindings/dashboard_binding.dart';
-import '../modules/admin/dashboard/views/dashboard_view.dart';
-import '../modules/admin/admin_category/bindings/admin_category_binding.dart';
-import '../modules/admin/admin_category/views/admin_category_view.dart';
+import '../modules/admin/admin_update_blogs/bindings/admin_update_blogs_binding.dart';
+import '../modules/admin/admin_update_blogs/views/admin_update_blogs_view.dart';
 import '../modules/auth/login/bindings/login_binding.dart';
 import '../modules/auth/login/views/login_view.dart';
 import '../modules/auth/register/bindings/register_binding.dart';
@@ -37,32 +41,32 @@ class AppPages {
   static final routes = [
     GetPage(
       name: _Paths.HOME,
-      page: () =>  HomeView(),
+      page: () => HomeView(),
       binding: HomeBinding(),
     ),
     GetPage(
       name: _Paths.REELS,
-      page: () =>  ReelsView(),
+      page: () => ReelsView(),
       binding: ReelsBinding(),
     ),
     GetPage(
       name: _Paths.PROFILE,
-      page: () =>  ProfileView(),
+      page: () => ProfileView(),
       binding: ProfileBinding(),
     ),
     GetPage(
       name: _Paths.SPLASH,
-      page: () =>  SplashView(),
+      page: () => SplashView(),
       binding: SplashBinding(),
     ),
     GetPage(
       name: _Paths.LOGIN,
-      page: () =>  LoginView(),
+      page: () => LoginView(),
       binding: LoginBinding(),
     ),
     GetPage(
       name: _Paths.REGISTER,
-      page: () => const RegisterView(),
+      page: () => RegisterView(),
       binding: RegisterBinding(),
     ),
     GetPage(
@@ -76,13 +80,8 @@ class AppPages {
       binding: AdminBlogsBinding(),
     ),
     GetPage(
-      name: _Paths.DASHBOARD,
-      page: () => const DashboardView(),
-      binding: DashboardBinding(),
-    ),
-    GetPage(
       name: _Paths.ADMIN_PROFILE,
-      page: () => const AdminProfileView(),
+      page: () => AdminProfileView(),
       binding: AdminProfileBinding(),
     ),
     GetPage(
@@ -92,13 +91,28 @@ class AppPages {
     ),
     GetPage(
       name: _Paths.ADMIN_MAIN,
-      page: () =>  AdminMainView(),
+      page: () => AdminMainView(),
       binding: AdminMainBinding(),
     ),
     GetPage(
       name: _Paths.ADMIN_CATEGORY,
       page: () => const AdminCategoryView(),
       binding: AdminCategoryBinding(),
+    ),
+    GetPage(
+      name: _Paths.ADMIN_DASHBOARD,
+      page: () => const AdminDashboardView(),
+      binding: AdminDashboardBinding(),
+    ),
+    GetPage(
+      name: _Paths.ADMIN_CREATE_BLOGS,
+      page: () => const AdminCreateBlogsView(),
+      binding: AdminCreateBlogsBinding(),
+    ),
+    GetPage(
+      name: _Paths.ADMIN_UPDATE_BLOGS,
+      page: () => const AdminUpdateBlogsView(),
+      binding: AdminUpdateBlogsBinding(),
     ),
   ];
 }

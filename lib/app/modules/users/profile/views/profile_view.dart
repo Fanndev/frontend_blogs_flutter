@@ -1,3 +1,4 @@
+import 'package:blogs_apps/app/routes/app_pages.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:blogs_apps/app/middleware/auth.controller.dart';
@@ -11,7 +12,7 @@ class ProfileView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Profile"),
+        title: const Text("Profile"),
         centerTitle: true,
       ),
       body: Obx(() {
@@ -23,31 +24,33 @@ class ProfileView extends StatelessWidget {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Icon(Icons.person_outline, size: 100, color: Colors.grey),
-                  SizedBox(height: 24),
-                  Text(
+                  const Icon(Icons.person_outline, size: 100, color: Colors.grey),
+                  const SizedBox(height: 24),
+                  const Text(
                     "Anda belum login",
                     style: TextStyle(fontSize: 18),
                   ),
-                  SizedBox(height: 24),
-                  ElevatedButton(
-                    onPressed: () {
-                      Get.toNamed('/login');
-                    },
-                    style: ElevatedButton.styleFrom(
-                      minimumSize: Size(double.infinity, 50),
+                  const SizedBox(height: 24),
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton(
+                      onPressed: () => Get.toNamed(Routes.LOGIN),
+                      style: ElevatedButton.styleFrom(
+                        minimumSize: const Size(double.infinity, 50),
+                      ),
+                      child: const Text("Login"),
                     ),
-                    child: Text("Login"),
                   ),
-                  SizedBox(height: 12),
-                  OutlinedButton(
-                    onPressed: () {
-                      Get.toNamed('/register');
-                    },
-                    style: OutlinedButton.styleFrom(
-                      minimumSize: Size(double.infinity, 50),
+                  const SizedBox(height: 12),
+                  SizedBox(
+                    width: double.infinity,
+                    child: OutlinedButton(
+                      onPressed: () => Get.toNamed(Routes.REGISTER),
+                      style: OutlinedButton.styleFrom(
+                        minimumSize: const Size(double.infinity, 50),
+                      ),
+                      child: const Text("Register"),
                     ),
-                    child: Text("Register"),
                   ),
                 ],
               ),
@@ -56,33 +59,45 @@ class ProfileView extends StatelessWidget {
         }
 
         // Sudah login: tampilkan profile
+        final username = (auth.user.value.username ?? "").isNotEmpty
+    ? auth.user.value.username!
+    : "Pengguna";
+
+
+        final profileImageUrl = "https://ui-avatars.com/api/"
+            "?name=$username"
+            "&background=random"
+            "&color=ffffff"
+            "&size=256";
+
         return Column(
           children: [
             const SizedBox(height: 24),
             CircleAvatar(
               radius: 50,
-              backgroundImage: NetworkImage(
-                "https://i.pravatar.cc/300",
-              ),
+              backgroundImage: NetworkImage(profileImageUrl),
+              backgroundColor: Colors.grey[300],
             ),
             const SizedBox(height: 16),
             Text(
-              auth.username.value.isNotEmpty ? auth.username.value : "Nama Pengguna",
-              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              username,
+              style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 24),
-            Divider(),
+            const Divider(),
             ListTile(
-              leading: Icon(Icons.edit),
-              title: Text("Edit Profile"),
-              trailing: Icon(Icons.arrow_forward_ios, size: 16),
+              leading: const Icon(Icons.edit),
+              title: const Text("Edit Profile"),
+              trailing: const Icon(Icons.arrow_forward_ios, size: 16),
               onTap: () {
-                Get.snackbar("Edit Profile", "Fitur belum tersedia");
+                Get.snackbar("Edit Profile", "Fitur belum tersedia",
+                    backgroundColor: Colors.blueAccent,
+                    colorText: Colors.white);
               },
             ),
             ListTile(
-              leading: Icon(Icons.logout, color: Colors.red),
-              title: Text(
+              leading: const Icon(Icons.logout, color: Colors.red),
+              title: const Text(
                 "Logout",
                 style: TextStyle(color: Colors.red),
               ),
@@ -96,7 +111,9 @@ class ProfileView extends StatelessWidget {
                   onConfirm: () {
                     auth.logout();
                     Get.back();
-                    Get.snackbar("Logout", "Berhasil logout");
+                    Get.snackbar("Logout", "Berhasil logout",
+                        backgroundColor: Colors.green,
+                        colorText: Colors.white);
                   },
                 );
               },

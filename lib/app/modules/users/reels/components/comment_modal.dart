@@ -98,7 +98,7 @@ void showCommentsModal(BuildContext context, List<CommentModel> comments, {requi
                           CommentModel(
                             id: DateTime.now().millisecondsSinceEpoch,
                             content: text,
-                            username: auth.username.value,
+                            username: auth.user.value.username,
                             createdAt: DateTime.now(),
                           ),
                         );

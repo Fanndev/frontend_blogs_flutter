@@ -1,6 +1,9 @@
+import 'package:blogs_apps/app/modules/users/home/controllers/home_controller.dart';
+import 'package:blogs_apps/app/routes/app_pages.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:blogs_apps/app/modules/users/home/controllers/home_controller.dart';
+import 'package:intl/intl.dart';
+import 'package:shimmer/shimmer.dart';
 
 class HomeView extends StatelessWidget {
   HomeView({super.key});
@@ -14,57 +17,84 @@ class HomeView extends StatelessWidget {
       body: SafeArea(
         child: Obx(() {
           if (controller.isLoading.value) {
-            return Center(child: CircularProgressIndicator());
-          }
-
-          return SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                // Search Bar dengan shadow
-                Material(
-                  elevation: 2,
-                  shadowColor: Colors.grey.withOpacity(0.2),
-                  borderRadius: BorderRadius.circular(12),
-                  child: TextField(
-                    decoration: InputDecoration(
-                      hintText: "Search News",
-                      prefixIcon: Icon(Icons.search),
-                      filled: true,
-                      fillColor: Colors.grey[100],
-                      contentPadding:
-                          EdgeInsets.symmetric(vertical: 0, horizontal: 16),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(12),
-                        borderSide: BorderSide.none,
-                      ),
-                    ),
+            return ListView.builder(
+              itemCount: 6,
+              itemBuilder: (_, __) => Shimmer.fromColors(
+                baseColor: Colors.grey[300]!,
+                highlightColor: Colors.grey[100]!,
+                child: Container(
+                  margin: const EdgeInsets.all(12),
+                  height: 100,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(12),
                   ),
                 ),
-                const SizedBox(height: 20),
+              ),
+            );
+          }
 
-                // Most Related
-                const Text(
-                  "Berita Terkini",
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+          return CustomScrollView(
+            slivers: [
+              SliverToBoxAdapter(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Search Bar
+                      Material(
+                        elevation: 2,
+                        shadowColor: Colors.grey.withOpacity(0.2),
+                        borderRadius: BorderRadius.circular(12),
+                        child: TextField(
+                          decoration: InputDecoration(
+                            hintText: "Search News",
+                            prefixIcon: Icon(Icons.search),
+                            filled: true,
+                            fillColor: Colors.grey[100],
+                            contentPadding:
+                                EdgeInsets.symmetric(vertical: 0, horizontal: 16),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(12),
+                              borderSide: BorderSide.none,
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(height: 20),
+
+                      // Berita Terkini
+                      const Text(
+                        "Berita Terkini",
+                        style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                      ),
+                      const SizedBox(height: 12),
+                    ],
+                  ),
                 ),
-                const SizedBox(height: 12),
-                SizedBox(
-                  height: 220,
-                  child: ListView.builder(
+              ),
+              SliverToBoxAdapter(
+                child: SizedBox(
+                  height: 240,
+                  child: ListView.separated(
                     scrollDirection: Axis.horizontal,
+                    padding: const EdgeInsets.symmetric(horizontal: 16),
                     itemCount: controller.beritaList.length,
+                    separatorBuilder: (_, __) => SizedBox(width: 12),
                     itemBuilder: (context, index) {
                       final item = controller.beritaList[index];
+                      final dateStr = item.createdAt != null
+                          ? DateFormat('dd MMM yyyy').format(item.createdAt!)
+                          : "-";
+
                       return InkWell(
                         onTap: () {
-                          Get.toNamed('/detail-berita', arguments: item);
+                          Get.toNamed(Routes.DETAIL_BLOGS, arguments: item.id);
                         },
                         borderRadius: BorderRadius.circular(16),
                         child: Container(
                           width: 280,
-                          margin: EdgeInsets.only(right: 12),
                           decoration: BoxDecoration(
                             color: Colors.white,
                             borderRadius: BorderRadius.circular(16),
@@ -80,12 +110,10 @@ class HomeView extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               ClipRRect(
-                                borderRadius: BorderRadius.vertical(
-                                    top: Radius.circular(16)),
+                                borderRadius: BorderRadius.vertical(top: Radius.circular(16)),
                                 child: Image.network(
-                                  item.thumbnail ??
-                                      "https://source.unsplash.com/random/300x200?news",
-                                  height: 120,
+                                  item.thumbnail ?? "https://source.unsplash.com/random/300x200?news",
+                                  height: 140,
                                   width: double.infinity,
                                   fit: BoxFit.cover,
                                 ),
@@ -97,32 +125,25 @@ class HomeView extends StatelessWidget {
                                   children: [
                                     Text(
                                       item.title ?? "",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold),
+                                      style: TextStyle(fontWeight: FontWeight.bold),
                                       maxLines: 2,
                                       overflow: TextOverflow.ellipsis,
                                     ),
                                     const SizedBox(height: 8),
                                     Row(
                                       children: [
-                                        Icon(Icons.access_time,
-                                            size: 16, color: Colors.grey),
+                                        Icon(Icons.access_time, size: 16, color: Colors.grey),
                                         const SizedBox(width: 4),
                                         Text(
-                                          item.createdAt.toString(),
-                                          style: TextStyle(
-                                              color: Colors.grey,
-                                              fontSize: 12),
+                                          dateStr,
+                                          style: TextStyle(color: Colors.grey, fontSize: 12),
                                         ),
                                         const SizedBox(width: 16),
-                                        Icon(Icons.comment,
-                                            size: 16, color: Colors.grey),
+                                        Icon(Icons.comment, size: 16, color: Colors.grey),
                                         const SizedBox(width: 4),
                                         Text(
-                                          "0",
-                                          style: TextStyle(
-                                              color: Colors.grey,
-                                              fontSize: 12),
+                                          "${item.comments?.length ?? 0}",
+                                          style: TextStyle(color: Colors.grey, fontSize: 12),
                                         ),
                                       ],
                                     ),
@@ -136,27 +157,31 @@ class HomeView extends StatelessWidget {
                     },
                   ),
                 ),
-                const SizedBox(height: 24),
-
-                // Berita Lainnya
-                const Text(
-                  "Berita Lainnya",
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+              ),
+              SliverPadding(
+                padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 20),
+                sliver: SliverToBoxAdapter(
+                  child: const Text(
+                    "Berita Lainnya",
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                  ),
                 ),
-                const SizedBox(height: 12),
-                ListView.builder(
-                  shrinkWrap: true,
-                  physics: NeverScrollableScrollPhysics(),
-                  itemCount: controller.beritaList.length,
-                  itemBuilder: (context, index) {
+              ),
+              SliverList(
+                delegate: SliverChildBuilderDelegate(
+                  (context, index) {
                     final item = controller.beritaList[index];
+                    final dateStr = item.createdAt != null
+                        ? DateFormat('dd MMM yyyy').format(item.createdAt!)
+                        : "-";
+
                     return InkWell(
                       onTap: () {
-                        Get.toNamed('/detail-berita', arguments: item);
+                        Get.toNamed(Routes.DETAIL_BLOGS, arguments: item.id);
                       },
                       borderRadius: BorderRadius.circular(12),
                       child: Container(
-                        margin: EdgeInsets.only(bottom: 12),
+                        margin: const EdgeInsets.only(left: 16, right: 16, bottom: 12),
                         decoration: BoxDecoration(
                           color: Colors.white,
                           borderRadius: BorderRadius.circular(12),
@@ -173,8 +198,7 @@ class HomeView extends StatelessWidget {
                           leading: ClipRRect(
                             borderRadius: BorderRadius.circular(8),
                             child: Image.network(
-                              item.thumbnail ??
-                                  "https://source.unsplash.com/random/100x100?news",
+                              item.thumbnail ?? "https://source.unsplash.com/random/100x100?news",
                               width: 80,
                               height: 80,
                               fit: BoxFit.cover,
@@ -188,13 +212,11 @@ class HomeView extends StatelessWidget {
                           ),
                           subtitle: Row(
                             children: [
-                              Icon(Icons.access_time,
-                                  size: 16, color: Colors.grey),
+                              Icon(Icons.access_time, size: 16, color: Colors.grey),
                               const SizedBox(width: 4),
                               Text(
-                                item.createdAt.toString(),
-                                style: TextStyle(
-                                    color: Colors.grey, fontSize: 12),
+                                dateStr,
+                                style: TextStyle(color: Colors.grey, fontSize: 12),
                               ),
                             ],
                           ),
@@ -202,9 +224,11 @@ class HomeView extends StatelessWidget {
                       ),
                     );
                   },
+                  childCount: controller.beritaList.length,
                 ),
-              ],
-            ),
+              ),
+              SliverToBoxAdapter(child: SizedBox(height: 20)),
+            ],
           );
         }),
       ),

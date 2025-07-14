@@ -17,6 +17,9 @@ abstract class Routes {
   static const ADMIN_MAIN = _Paths.ADMIN_MAIN;
   static const CATEGORY = _Paths.CATEGORY;
   static const ADMIN_CATEGORY = _Paths.ADMIN_CATEGORY;
+  static const ADMIN_DASHBOARD = _Paths.ADMIN_DASHBOARD;
+  static const ADMIN_CREATE_BLOGS = _Paths.ADMIN_CREATE_BLOGS;
+  static const ADMIN_UPDATE_BLOGS = _Paths.ADMIN_UPDATE_BLOGS;
 }
 
 abstract class _Paths {
@@ -35,4 +38,7 @@ abstract class _Paths {
   static const ADMIN_MAIN = '/admin-main';
   static const CATEGORY = '/category';
   static const ADMIN_CATEGORY = '/admin-category';
+  static const ADMIN_DASHBOARD = '/admin-dashboard';
+  static const ADMIN_CREATE_BLOGS = '/admin-create-blogs';
+  static const ADMIN_UPDATE_BLOGS = '/admin-update-blogs';
 }
